@@ -1,6 +1,6 @@
 import pytest
 
-from main import is_account_number_valid, is_nominal_valid
+from main import hash_pin, is_account_number_valid, is_nominal_valid, verify_pin
 
 
 @pytest.mark.parametrize(
@@ -30,3 +30,20 @@ def test_is_account_number_valid(nomor_rekening, expected):
 )
 def test_is_nominal_valid(nominal, expected):
     assert is_nominal_valid(nominal) == expected
+
+
+def test_hash_pin_tidak_sama_dengan_pin_asli():
+    pin = "123456"
+    assert hash_pin(pin) != pin
+
+
+def test_verify_pin_benar():
+    pin = "123456"
+    hashed = hash_pin(pin)
+    assert verify_pin(pin, hashed) is True
+
+
+def test_verify_pin_salah():
+    pin = "123456"
+    hashed = hash_pin(pin)
+    assert verify_pin("654321", hashed) is False
